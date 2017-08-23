@@ -1,0 +1,12 @@
+<RelativeLayout
+    android:id="@+id/frag_no_results"
+    style="@style/TransparentForm"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="@dimen/fab_margin">
+
+    <TextView
+        style="@style/TxtPrimaryLargeBold"
+        android:layout_centerInParent="true"
+        android:text="@string/no_results"/>
+
+</RelativeLayout>

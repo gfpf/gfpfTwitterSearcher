@@ -1,4 +1,4 @@
-package com.bitty.itty.gus.ittybittysocialsearcher;
+package com.bitty.itty.gus.socialsearcher;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

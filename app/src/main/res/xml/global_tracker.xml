@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="ga_trackingId">UA-69275568-1</string>
+
+    <!-- The application name. Defaults to name specified for the application label -->
+    <string name="ga_appName">@string/app_name</string>
+
+    <!-- The application version. Defaults to android:versionName specified in the AndroidManifest.xml -->
+    <string name="ga_appVersion">1.0</string>
+
+    <!-- The dispatching period in seconds when Google Play services is unavailable. The loading period is 1800 seconds or 30 minutes -->
+    <integer name="ga_dispatchPeriod">1800</integer>
+
+    <!-- Enable dry run mode. Default is false -->
+    <bool name="ga_dryRun">false</bool>
+
+    <!-- Views (Activities) will be tracked automatically -->
+    <bool name="ga_autoActivityTracking">true</bool>
+
+    <!-- To automatically send all uncaught exceptions in your app -->
+    <bool name="ga_reportUncaughtExceptions">true</bool>
+
+    <!-- Tells Google Analytics to anonymize the IP information sent by the SDK by removing the last octet of the IP address prior to its storage -->
+    <string name="ga_anonymizeIp">true</string>
+
+    <!-- Enable client-side sampling at a rate of 50% -->
+    <string name="ga_sampleFrequency">100.0</string>
+
+    <!-- The verbosity of the SDK logger -->
+    <string name="ga_logLevel">verbose</string>
+
+</resources>

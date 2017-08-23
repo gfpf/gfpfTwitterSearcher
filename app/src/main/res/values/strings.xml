@@ -5,4 +5,10 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <string name="no_results">No results</string>
+    <string name="connection_error">Connection error, please try again!</string>
+    <string name="enable_internet_service">Unavailable internet service, would like to enable it?</string>
+    <string name="nav_social_searcher">Social Searcher</string>
+
 </resources>
