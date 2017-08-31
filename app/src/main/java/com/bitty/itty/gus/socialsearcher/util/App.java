@@ -14,8 +14,7 @@ import android.net.NetworkInfo;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.Display;
-import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.bitty.itty.gus.socialsearcher.R;
@@ -129,9 +128,9 @@ public class App extends Application {
         });
     }
 
-    public static Display getDisplay() {
-        WindowManager wm = (WindowManager) app.getSystemService(Context.WINDOW_SERVICE);
-        return wm.getDefaultDisplay();
+    public static void hideKeyboard(Activity act) {
+        InputMethodManager imm = (InputMethodManager) act.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(act.getWindow().getDecorView().getWindowToken(), 0);
     }
 
 }

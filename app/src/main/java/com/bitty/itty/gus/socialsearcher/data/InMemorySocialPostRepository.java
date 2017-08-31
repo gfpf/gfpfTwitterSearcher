@@ -29,12 +29,12 @@ public class InMemorySocialPostRepository implements SocialPostRepository {
 
 
     @Override
-    public void loadSocialPosts(@NonNull String searchTerm, @NonNull final LoadSocialPostsCallback callback) {
+    public void loadSocialPosts(@NonNull String searchTerm, @NonNull String language, @NonNull String resultType, @NonNull final LoadSocialPostsCallback callback) {
         checkNotNull(callback);
 
         // Load from API only if needed.
         if (mCachedPosts == null) {
-            mSocialPostServiceApi.loadSocialPosts(searchTerm, new SocialPostServiceApi.SocialPostServiceCallback<List<TwitterPost>>() {
+            mSocialPostServiceApi.loadSocialPosts(searchTerm, language, resultType, new SocialPostServiceApi.SocialPostServiceCallback<List<TwitterPost>>() {
                 @Override
                 public void onServiceLoaded(List<TwitterPost> posts) {
                     mCachedPosts = ImmutableList.copyOf(posts);

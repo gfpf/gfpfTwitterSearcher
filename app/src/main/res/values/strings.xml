@@ -13,4 +13,23 @@
     <string name="nav_social_posts">Posts</string>
     <string name="query_hint">Search here…</string>
 
+
+    <string-array name="arr_languages">
+        <item>English - EN</item>
+        <item>Portuguese - PT</item>
+        <item>Spanish - ES</item>
+        <item>French - FR</item>
+        <item>German - DE</item>
+        <item>Italian - IT</item>
+        <item>Arabic - AR</item>
+        <item>Japanese - JA</item>
+        <item>Chinese - ZH</item>
+    </string-array>
+
+    <string-array name="arr_result_type">
+        <item>Popular</item>
+        <item>Recent</item>
+        <item>Mixed</item>
+    </string-array>
+
 </resources>

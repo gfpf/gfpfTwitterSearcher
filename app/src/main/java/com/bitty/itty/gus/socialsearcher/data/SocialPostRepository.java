@@ -24,7 +24,7 @@ public interface SocialPostRepository {
     }
 
 
-    void loadSocialPosts(@NonNull String searchTerm, @NonNull LoadSocialPostsCallback callback);
+    void loadSocialPosts(@NonNull String searchTerm, @NonNull String language, @NonNull String resultType, @NonNull LoadSocialPostsCallback callback);
 
     void loadSocialPost(@NonNull String postId, @NonNull LoadSocialPostCallback callback);
 

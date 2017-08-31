@@ -8,7 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.SearchView;
+import android.widget.Spinner;
 
 import com.bitty.itty.gus.socialsearcher.Injection;
 import com.bitty.itty.gus.socialsearcher.R;
@@ -25,7 +27,7 @@ import butterknife.ButterKnife;
  * Created by Gus on 24/8/17.
  */
 
-public class SocialPostFrag extends Fragment implements SocialPostContract.View {
+public class SocialPostFrag extends Fragment implements SocialPostContract.View, View.OnClickListener {
 
     private SocialPostAdapter mListAdapter;
 
@@ -33,6 +35,18 @@ public class SocialPostFrag extends Fragment implements SocialPostContract.View 
 
     @Bind(R.id.search_view)
     SearchView searchView;
+
+    @Bind(R.id.btn_filter)
+    ImageView btnFilter;
+
+    @Bind(R.id.lay_filters)
+    View layFilters;
+
+    @Bind(R.id.spn_lang)
+    Spinner spnLang;
+
+    @Bind(R.id.spn_result_type)
+    Spinner spnResultType;
 
     @Bind(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefresh;
@@ -67,11 +81,12 @@ public class SocialPostFrag extends Fragment implements SocialPostContract.View 
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mActionsListener.searchSocialPosts(searchView.getQuery().toString(), true);
+                mActionsListener.searchSocialPosts(searchView.getQuery().toString(), spnLang.getSelectedItem().toString(), spnResultType.getSelectedItem().toString(), true);
             }
         });
 
         searchView.setOnQueryTextListener(mQueryListener);
+        btnFilter.setOnClickListener(this);
 
         return rootView;
     }
@@ -93,6 +108,7 @@ public class SocialPostFrag extends Fragment implements SocialPostContract.View 
             @Override
             public void run() {
                 swipeRefresh.setRefreshing(active);
+                App.hideKeyboard(getActivity());
             }
         });
     }
@@ -119,7 +135,7 @@ public class SocialPostFrag extends Fragment implements SocialPostContract.View 
     SearchView.OnQueryTextListener mQueryListener = new SearchView.OnQueryTextListener() {
         @Override
         public boolean onQueryTextSubmit(String query) {
-            mActionsListener.searchSocialPosts(query, true);
+            mActionsListener.searchSocialPosts(query, spnLang.getSelectedItem().toString(), spnResultType.getSelectedItem().toString(), true);
             return false;
         }
 
@@ -140,4 +156,17 @@ public class SocialPostFrag extends Fragment implements SocialPostContract.View 
         }
 
     };
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_filter:
+                if (layFilters.getVisibility() == View.GONE) {
+                    layFilters.setVisibility(View.VISIBLE);
+                } else {
+                    layFilters.setVisibility(View.GONE);
+                }
+                break;
+        }
+    }
 }

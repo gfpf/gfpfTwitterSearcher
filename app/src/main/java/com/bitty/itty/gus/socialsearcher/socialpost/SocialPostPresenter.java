@@ -27,7 +27,7 @@ public class SocialPostPresenter implements SocialPostContract.UserActionsListen
     }
 
     @Override
-    public void searchSocialPosts(String searchTerm, boolean forceUpdate) {
+    public void searchSocialPosts(String searchTerm, String language, String resultType, boolean forceUpdate) {
         mSocialPostView.setProgressIndicator(true);
 
         if (forceUpdate) {
@@ -39,7 +39,7 @@ public class SocialPostPresenter implements SocialPostContract.UserActionsListen
         EspressoIdlingResource.increment(); // App is busy until further notice
 
         //Get all socialPost items
-        mSocialPostRepository.loadSocialPosts(searchTerm, new SocialPostRepository.LoadSocialPostsCallback() {
+        mSocialPostRepository.loadSocialPosts(searchTerm, language, resultType, new SocialPostRepository.LoadSocialPostsCallback() {
             @Override
             public void onPostsLoaded(List<TwitterPost> socialPostItems) {
                 EspressoIdlingResource.decrement(); // Set app as idle.

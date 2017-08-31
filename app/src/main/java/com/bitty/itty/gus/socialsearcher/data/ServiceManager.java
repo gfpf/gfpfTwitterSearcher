@@ -21,14 +21,11 @@ public class ServiceManager {
     final static String TWITTER_CONSUMER_SECRET = "NafDG9ETsSAPbrE2T8CetK37jHKgGula0W7ghJR4btcTTcJH3P";
 
     final static String TWITTER_TOKEN_URL = "https://api.twitter.com/oauth2/token";
-    final static String TWITTER_SEARCH_API_URL = "https://api.twitter.com/1.1/search/tweets.json?q=";
+    final static String TWITTER_SEARCH_API_URL = "https://api.twitter.com/1.1/search/tweets.json?q=%s&lang=%s&result_type=%s";
     //final static String TWITTER_SEARCH_API_URL = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=";
 
 
     static TwitterBearerToken TWITTER_BEARER_TOKEN;
-
-    /*public static final String API_URL = "https://api.myjson.com";
-    public static final String SOCIAL_POST_SERVICE_URL = "/bins/m47pd";*/
 
     private static ServiceManager instance;
     private RequestQueue mRequestQueue;

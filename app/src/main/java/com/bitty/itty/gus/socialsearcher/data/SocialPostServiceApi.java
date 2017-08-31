@@ -17,7 +17,7 @@ public interface SocialPostServiceApi {
         void onServiceCanceled();
     }
 
-    void loadSocialPosts(String searchTerm, SocialPostServiceCallback<List<TwitterPost>> callback);
+    void loadSocialPosts(String searchTerm, String language, String resultType, SocialPostServiceCallback<List<TwitterPost>> callback);
 
     void loadSocialPost(String postId, SocialPostServiceCallback<TwitterPost> callback);
 

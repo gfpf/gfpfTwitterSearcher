@@ -6,24 +6,74 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="util.MainActivity">
 
-    <SearchView
-        android:id="@+id/search_view"
+    <RelativeLayout
+        android:id="@+id/lay_search_filter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:background="@color/cardview_light_background"
-        android:iconifiedByDefault="false"
-        android:imeOptions="actionSearch"
-        android:queryHint="@string/query_hint"/>
+        android:animateLayoutChanges="true"
+        android:background="@android:color/darker_gray"
+        android:padding="@dimen/length_5">
+
+        <SearchView
+            android:id="@+id/search_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@color/cardview_light_background"
+            android:iconifiedByDefault="false"
+            android:imeOptions="actionSearch"
+            android:queryHint="@string/query_hint"/>
+
+        <ImageButton
+            android:id="@+id/btn_filter"
+            android:layout_width="@dimen/length_48"
+            android:layout_height="@dimen/length_48"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="@dimen/length_5"
+            android:layout_toRightOf="@id/search_view"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/ic_filter"/>
+
+        <LinearLayout
+            android:id="@+id/lay_filters"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/search_view"
+            android:layout_marginTop="@dimen/length_5"
+            android:visibility="gone"
+            android:weightSum="2">
+
+            <Spinner
+                android:id="@+id/spn_lang"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:entries="@array/arr_languages"/>
+
+            <Spinner
+                android:id="@+id/spn_result_type"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:entries="@array/arr_result_type"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/search_view"
+        android:layout_below="@id/lay_search_filter"
         android:layout_centerInParent="true">
 
         <android.support.v7.widget.RecyclerView

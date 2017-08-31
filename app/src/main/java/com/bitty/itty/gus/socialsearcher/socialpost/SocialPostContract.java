@@ -27,7 +27,7 @@ public interface SocialPostContract {
 
     interface UserActionsListener {
 
-        void searchSocialPosts(String searchTerm, boolean forceUpdate);
+        void searchSocialPosts(String searchTerm, String language, String resultType, boolean forceUpdate);
 
         void addSocialPost();
 
