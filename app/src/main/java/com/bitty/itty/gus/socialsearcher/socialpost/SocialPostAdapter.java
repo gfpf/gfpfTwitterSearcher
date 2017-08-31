@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bitty.itty.gus.socialsearcher.R;
-import com.bitty.itty.gus.socialsearcher.data.SocialPost;
+import com.bitty.itty.gus.socialsearcher.data.TwitterPost;
 import com.bitty.itty.gus.socialsearcher.util.App;
 import com.squareup.picasso.Picasso;
 
@@ -27,10 +27,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class SocialPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<SocialPost> mSocialPosts;
+    private List<TwitterPost> mSocialPosts;
     private SocialPostListener mItemListener;
 
-    SocialPostAdapter(List<SocialPost> socialPosts, SocialPostListener itemListener) {
+    SocialPostAdapter(List<TwitterPost> socialPosts, SocialPostListener itemListener) {
         setList(socialPosts);
         mItemListener = itemListener;
     }
@@ -39,7 +39,7 @@ public class SocialPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View socialPostView = inflater.inflate(R.layout.socialpost_item, parent, false);
+        View socialPostView = inflater.inflate(R.layout.twitter_post_item, parent, false);
 
         if (viewType == EMPTY_VIEW_TYPE) {
             socialPostView = inflater.inflate(R.layout.no_results_view, parent, false);
@@ -57,33 +57,31 @@ public class SocialPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         if (viewType == EMPTY_VIEW_TYPE) {
 
         } else {
-            SocialPost socialPost = mSocialPosts.get(position);
+            TwitterPost socialPost = mSocialPosts.get(position);
 
             ViewHolder viewHolder = (ViewHolder) genericViewHolder;
-            viewHolder.title.setText(socialPost.getTitle());
+            viewHolder.text.setText(socialPost.getText());
 
-            if (!TextUtils.isEmpty(socialPost.getDescription())) {
-                //FlowTextHelper.tryFlowText(socialPost.getDescription(), viewHolder.imageHref, viewHolder.description, App.getDisplay());
-                viewHolder.description.setText(socialPost.getDescription());
+            if (!TextUtils.isEmpty(socialPost.getTwitterUser().getName())) {
+                viewHolder.description.setText(socialPost.getTwitterUser().getName());
             }
 
-            if (!TextUtils.isEmpty(socialPost.getImageHref())) {
+            if (!TextUtils.isEmpty(socialPost.getTwitterUser().getProfileImageUrl())) {
                 Picasso.with(App.get())
-                        .load(socialPost.getImageHref())
+                        .load(socialPost.getTwitterUser().getProfileImageUrl())
                         .placeholder(android.R.drawable.ic_menu_gallery)
                         .into(viewHolder.imageHref);
             }
 
         }
-
     }
 
-    void replaceData(List<SocialPost> socialPosts) {
+    void replaceData(List<TwitterPost> socialPosts) {
         setList(socialPosts);
         notifyDataSetChanged();
     }
 
-    private void setList(List<SocialPost> socialPosts) {
+    private void setList(List<TwitterPost> socialPosts) {
         mSocialPosts = checkNotNull(socialPosts);
     }
 
@@ -103,7 +101,7 @@ public class SocialPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return super.getItemViewType(position);
     }
 
-    private SocialPost getItem(int position) {
+    private TwitterPost getItem(int position) {
         return mSocialPosts.get(position);
     }
 
@@ -115,13 +113,13 @@ public class SocialPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @Bind(R.id.socialpost_item_title)
-        TextView title;
+        @Bind(R.id.social_post_item_text)
+        TextView text;
 
-        @Bind(R.id.socialpost_item_description)
+        @Bind(R.id.social_post_item_user_name)
         TextView description;
 
-        @Bind(R.id.socialpost_item_image_href)
+        @Bind(R.id.social_post_item_user_image)
         ImageView imageHref;
 
         private SocialPostListener mItemListener;
@@ -137,13 +135,12 @@ public class SocialPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-            SocialPost socialPost = getItem(position);
+            TwitterPost socialPost = getItem(position);
             mItemListener.onSocialPostClick(socialPost);
         }
     }
 
-
     interface SocialPostListener {
-        void onSocialPostClick(SocialPost clickedSocialPost);
+        void onSocialPostClick(TwitterPost clickedSocialPost);
     }
 }

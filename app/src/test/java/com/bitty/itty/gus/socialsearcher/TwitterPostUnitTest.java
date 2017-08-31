@@ -1,6 +1,6 @@
 package com.bitty.itty.gus.socialsearcher;
 
-import com.bitty.itty.gus.socialsearcher.data.SocialPost;
+import com.bitty.itty.gus.socialsearcher.data.TwitterPost;
 import com.bitty.itty.gus.socialsearcher.data.SocialPostRepository;
 import com.bitty.itty.gus.socialsearcher.socialpost.SocialPostContract;
 import com.bitty.itty.gus.socialsearcher.socialpost.SocialPostPresenter;
@@ -26,21 +26,21 @@ import static org.mockito.Mockito.verify;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class SocialPostUnitTest {
+public class TwitterPostUnitTest {
 
-    private static ArrayList<SocialPost> POSTS = Lists.newArrayList(
-            new SocialPost("Title0", "Description0"),
-            new SocialPost("Title1", "Description1"),
-            new SocialPost("Title2", "Description2"),
-            new SocialPost("Title3", "Description3"),
-            new SocialPost("Title4", "Description4"),
-            new SocialPost("Title5", "Description5"),
-            new SocialPost("Title6", "Description6"),
-            new SocialPost("Title7", "Description7"),
-            new SocialPost("Title8", "Description8"),
-            new SocialPost("Title9", "Description9"));
+    private static ArrayList<TwitterPost> POSTS = Lists.newArrayList(
+            new TwitterPost("Title0", "Description0"),
+            new TwitterPost("Title1", "Description1"),
+            new TwitterPost("Title2", "Description2"),
+            new TwitterPost("Title3", "Description3"),
+            new TwitterPost("Title4", "Description4"),
+            new TwitterPost("Title5", "Description5"),
+            new TwitterPost("Title6", "Description6"),
+            new TwitterPost("Title7", "Description7"),
+            new TwitterPost("Title8", "Description8"),
+            new TwitterPost("Title9", "Description9"));
 
-    private static List<SocialPost> EMPTY_POSTS = new ArrayList<>(0);
+    private static List<TwitterPost> EMPTY_POSTS = new ArrayList<>(0);
 
     @Mock
     private SocialPostRepository mSocialPostRepository;
@@ -53,7 +53,7 @@ public class SocialPostUnitTest {
      * perform further actions or assertions on them.
      */
     @Captor
-    private ArgumentCaptor<SocialPostRepository.loadSocialPostsCallback> mLoadPostsCallbackCaptor;
+    private ArgumentCaptor<SocialPostRepository.LoadSocialPostsCallback> mLoadPostsCallbackCaptor;
 
     private SocialPostPresenter mSocialPostPresenter;
 
@@ -95,7 +95,7 @@ public class SocialPostUnitTest {
     @Test
     public void clickOnPost_ShowsDetailUI() {
         // Given a stubbed post
-        SocialPost requestedPost = new SocialPost("Details Requested", "For this post");
+        TwitterPost requestedPost = new TwitterPost("Details Requested", "For this post");
 
         // When open post details is requested
         mSocialPostPresenter.openSocialPostDetail(requestedPost);

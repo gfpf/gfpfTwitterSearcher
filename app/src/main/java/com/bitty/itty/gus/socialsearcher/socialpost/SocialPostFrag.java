@@ -8,11 +8,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.SearchView;
 
+import com.bitty.itty.gus.socialsearcher.Injection;
 import com.bitty.itty.gus.socialsearcher.R;
-import com.bitty.itty.gus.socialsearcher.data.SocialPost;
+import com.bitty.itty.gus.socialsearcher.data.TwitterPost;
 import com.bitty.itty.gus.socialsearcher.util.App;
 
 import java.util.ArrayList;
@@ -25,16 +25,19 @@ import butterknife.ButterKnife;
  * Created by Gus on 24/8/17.
  */
 
-public class SocialPostFrag extends Fragment implements SocialPostContract.View, ListView.OnItemClickListener {
+public class SocialPostFrag extends Fragment implements SocialPostContract.View {
 
     private SocialPostAdapter mListAdapter;
 
     private SocialPostContract.UserActionsListener mActionsListener;
 
+    @Bind(R.id.search_view)
+    SearchView searchView;
+
     @Bind(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefresh;
 
-    @Bind(R.id.feed_recycler_view)
+    @Bind(R.id.recycler_view)
     RecyclerView recyclerView;
 
     public SocialPostFrag() {
@@ -50,15 +53,13 @@ public class SocialPostFrag extends Fragment implements SocialPostContract.View,
         View rootView = inflater.inflate(R.layout.socialpost_frag, container, false);
         ButterKnife.bind(this, rootView);
 
+        mActionsListener = new SocialPostPresenter(Injection.provideSocialPostRepository(), this);
 
-        //TODO UNCOMMENT
-        //mActionsListener = new SocialPostPresenter(Injection.provideFeedRepository(), this);
-
-        mListAdapter = new SocialPostAdapter(new ArrayList<SocialPost>(0), mItemListener);
+        mListAdapter = new SocialPostAdapter(new ArrayList<TwitterPost>(0), mItemListener);
         recyclerView.setAdapter(mListAdapter);
         recyclerView.setHasFixedSize(true);
 
-        int numColumns = getResources().getInteger(R.integer.num_feed_columns);
+        int numColumns = getResources().getInteger(R.integer.num_post_columns);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), numColumns));
 
         // Pull-to-refresh
@@ -66,17 +67,13 @@ public class SocialPostFrag extends Fragment implements SocialPostContract.View,
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mActionsListener.searchSocialPosts(true);
+                mActionsListener.searchSocialPosts(searchView.getQuery().toString(), true);
             }
         });
 
-        return rootView;
-    }
+        searchView.setOnQueryTextListener(mQueryListener);
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mActionsListener.searchSocialPosts(false);
+        return rootView;
     }
 
     @Override
@@ -85,25 +82,29 @@ public class SocialPostFrag extends Fragment implements SocialPostContract.View,
         setRetainInstance(true);
     }
 
-
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    public void setProgressIndicator(final boolean active) {
+        if (getView() == null) {
+            return;
+        }
 
-    }
-
-    @Override
-    public void setProgressIndicator(boolean active) {
-
+        // Make sure setRefreshing() is called after the layout is done with everything else.
+        swipeRefresh.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefresh.setRefreshing(active);
+            }
+        });
     }
 
     @Override
     public void showToastMessage(String message) {
-
+        App.showToast(getActivity(), message);
     }
 
     @Override
-    public void showSocialPostsUI(List<SocialPost> posts) {
-
+    public void showSocialPostsUI(List<TwitterPost> posts) {
+        mListAdapter.replaceData(posts);
     }
 
     @Override
@@ -112,16 +113,28 @@ public class SocialPostFrag extends Fragment implements SocialPostContract.View,
     }
 
     @Override
-    public void showSocialPostDetailUI(String postId) {
-
+    public void showSocialPostDetailUI(long postId) {
     }
 
+    SearchView.OnQueryTextListener mQueryListener = new SearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextSubmit(String query) {
+            mActionsListener.searchSocialPosts(query, true);
+            return false;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String newText) {
+            return false;
+        }
+    };
+
     /**
-     * Listener for clicks on feeds in the RecyclerView.
+     * Listener for clicks on posts in the RecyclerView.
      */
     SocialPostAdapter.SocialPostListener mItemListener = new SocialPostAdapter.SocialPostListener() {
         @Override
-        public void onSocialPostClick(SocialPost clickedPost) {
+        public void onSocialPostClick(TwitterPost clickedPost) {
             showToastMessage("Under construction...");
             mActionsListener.openSocialPostDetail(clickedPost);
         }

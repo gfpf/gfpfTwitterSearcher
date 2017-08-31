@@ -3,7 +3,7 @@ package com.bitty.itty.gus.socialsearcher.socialpost;
 import android.support.annotation.NonNull;
 
 import com.bitty.itty.gus.socialsearcher.R;
-import com.bitty.itty.gus.socialsearcher.data.SocialPost;
+import com.bitty.itty.gus.socialsearcher.data.TwitterPost;
 import com.bitty.itty.gus.socialsearcher.data.SocialPostRepository;
 import com.bitty.itty.gus.socialsearcher.util.App;
 import com.bitty.itty.gus.socialsearcher.util.EspressoIdlingResource;
@@ -27,7 +27,7 @@ public class SocialPostPresenter implements SocialPostContract.UserActionsListen
     }
 
     @Override
-    public void searchSocialPosts(boolean forceUpdate) {
+    public void searchSocialPosts(String searchTerm, boolean forceUpdate) {
         mSocialPostView.setProgressIndicator(true);
 
         if (forceUpdate) {
@@ -39,9 +39,9 @@ public class SocialPostPresenter implements SocialPostContract.UserActionsListen
         EspressoIdlingResource.increment(); // App is busy until further notice
 
         //Get all socialPost items
-        mSocialPostRepository.loadSocialPosts(new SocialPostRepository.loadSocialPostsCallback() {
+        mSocialPostRepository.loadSocialPosts(searchTerm, new SocialPostRepository.LoadSocialPostsCallback() {
             @Override
-            public void onPostsLoaded(List<SocialPost> socialPostItems) {
+            public void onPostsLoaded(List<TwitterPost> socialPostItems) {
                 EspressoIdlingResource.decrement(); // Set app as idle.
                 mSocialPostView.setProgressIndicator(false);
                 mSocialPostView.showSocialPostsUI(socialPostItems);
@@ -62,9 +62,8 @@ public class SocialPostPresenter implements SocialPostContract.UserActionsListen
     }
 
     @Override
-    public void openSocialPostDetail(@NonNull SocialPost post) {
+    public void openSocialPostDetail(@NonNull TwitterPost post) {
         checkNotNull(post, "requestedFeed cannot be null!");
         mSocialPostView.showSocialPostDetailUI(post.getId());
-
     }
 }

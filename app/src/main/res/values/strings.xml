@@ -10,5 +10,7 @@
     <string name="connection_error">Connection error, please try again!</string>
     <string name="enable_internet_service">Unavailable internet service, would like to enable it?</string>
     <string name="nav_social_searcher">Social Searcher</string>
+    <string name="nav_social_posts">Posts</string>
+    <string name="query_hint">Search here…</string>
 
 </resources>

@@ -2,7 +2,7 @@ package com.bitty.itty.gus.socialsearcher.socialpost;
 
 import android.support.annotation.NonNull;
 
-import com.bitty.itty.gus.socialsearcher.data.SocialPost;
+import com.bitty.itty.gus.socialsearcher.data.TwitterPost;
 
 import java.util.List;
 
@@ -18,20 +18,20 @@ public interface SocialPostContract {
 
         void showToastMessage(String message);
 
-        void showSocialPostsUI(List<SocialPost> posts);
+        void showSocialPostsUI(List<TwitterPost> posts);
 
         void showAddSocialPostUI();
 
-        void showSocialPostDetailUI(String postId);
+        void showSocialPostDetailUI(long postId);
     }
 
     interface UserActionsListener {
 
-        void searchSocialPosts(boolean forceUpdate);
+        void searchSocialPosts(String searchTerm, boolean forceUpdate);
 
         void addSocialPost();
 
-        void openSocialPostDetail(@NonNull SocialPost post);
+        void openSocialPostDetail(@NonNull TwitterPost post);
     }
 
 }
