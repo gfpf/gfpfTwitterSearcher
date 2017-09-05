@@ -3,10 +3,6 @@ package com.bitty.itty.gus.socialsearcher.data;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 
-import com.google.common.collect.ImmutableList;
-
-import java.util.List;
-
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -21,7 +17,8 @@ public class InMemorySocialPostRepository implements SocialPostRepository {
      * This method has reduced visibility for testing and is only visible to tests in the same package.
      */
     @VisibleForTesting
-    private List<TwitterPost> mCachedPosts;
+    //private List<TwitterPost> mCachedPosts;
+    private TwitterSearchResult mCachedResults;
 
     public InMemorySocialPostRepository(@NonNull SocialPostServiceApi postServiceApi) {
         mSocialPostServiceApi = checkNotNull(postServiceApi);
@@ -29,16 +26,18 @@ public class InMemorySocialPostRepository implements SocialPostRepository {
 
 
     @Override
-    public void loadSocialPosts(@NonNull String searchTerm, @NonNull String language, @NonNull String resultType, @NonNull final LoadSocialPostsCallback callback) {
+    public void loadSocialPosts(@NonNull String searchTerm, @NonNull String language, @NonNull String resultType, @NonNull long sinceId, @NonNull long maxId, @NonNull final LoadSocialPostsCallback callback) {
         checkNotNull(callback);
 
         // Load from API only if needed.
-        if (mCachedPosts == null) {
-            mSocialPostServiceApi.loadSocialPosts(searchTerm, language, resultType, new SocialPostServiceApi.SocialPostServiceCallback<List<TwitterPost>>() {
+        if (mCachedResults == null) {
+            mSocialPostServiceApi.loadSocialPosts(searchTerm, language, resultType, sinceId, maxId, new SocialPostServiceApi.SocialPostServiceCallback<TwitterSearchResult>() {
                 @Override
-                public void onServiceLoaded(List<TwitterPost> posts) {
-                    mCachedPosts = ImmutableList.copyOf(posts);
-                    callback.onPostsLoaded(mCachedPosts);
+                //public void onServiceLoaded(List<TwitterPost> posts) {
+                public void onServiceLoaded(TwitterSearchResult searchResult) {
+                    //mCachedPosts = ImmutableList.copyOf(searchResult.getStatuses());
+                    mCachedResults = searchResult;
+                    callback.onPostsLoaded(searchResult);
                 }
 
                 @Override
@@ -46,8 +45,26 @@ public class InMemorySocialPostRepository implements SocialPostRepository {
                     callback.onPostsCanceled();
                 }
             });
-        } else callback.onPostsLoaded(mCachedPosts);
+        } else callback.onPostsLoaded(mCachedResults);
     }
+
+    /*@Override
+    public void loadMoreSocialPosts(@NonNull String nextResults, final @NonNull LoadSocialPostsCallback callback) {
+        mSocialPostServiceApi.loadMoreSocialPosts(nextResults, new SocialPostServiceApi.SocialPostServiceCallback<TwitterSearchResult>() {
+            @Override
+            //public void onServiceLoaded(List<TwitterPost> posts) {
+            public void onServiceLoaded(TwitterSearchResult searchResult) {
+                //mCachedPosts = ImmutableList.copyOf(searchResult.getStatuses());
+                mCachedResults = searchResult;
+                callback.onPostsLoaded(searchResult);
+            }
+
+            @Override
+            public void onServiceCanceled() {
+                callback.onPostsCanceled();
+            }
+        });
+    }*/
 
     @Override
     public void loadSocialPost(@NonNull String postId, @NonNull final LoadSocialPostCallback callback) {
@@ -79,6 +96,6 @@ public class InMemorySocialPostRepository implements SocialPostRepository {
 
     @Override
     public void refreshData() {
-        mCachedPosts = null;
+        mCachedResults = null;
     }
 }

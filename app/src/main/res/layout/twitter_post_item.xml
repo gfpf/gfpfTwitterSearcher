@@ -49,6 +49,7 @@
             android:layout_centerVertical="true"
             android:layout_margin="@dimen/fab_margin"
             android:layout_toRightOf="@id/lay_user"
+            android:autoLink="web"
             android:text="@string/app_name"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="@color/colorPrimary"/>

@@ -13,17 +13,17 @@ public class FakeSocialPostServiceApiEndpoint {
         addSocialPost("Fake Post2");
     }
 
-    private final static ArrayMap<String, SocialPost> FAKE_POST_SERVICE_DATA;
+    private final static ArrayMap<String, TwitterPost> FAKE_POST_SERVICE_DATA;
 
     private static void addSocialPost(String text) {
-        SocialPost post = new SocialPost(text);
+        TwitterPost post = new TwitterPost(text);
         FAKE_POST_SERVICE_DATA.put(post.getUUID(), post);
     }
 
     /**
      * @return the Posts to show when starting the app.
      */
-    public static ArrayMap<String, SocialPost> loadPersistedPosts() {
+    public static ArrayMap<String, TwitterPost> loadPersistedPosts() {
         return FAKE_POST_SERVICE_DATA;
     }
 }

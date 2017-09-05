@@ -2,8 +2,6 @@ package com.bitty.itty.gus.socialsearcher.data;
 
 import android.support.annotation.NonNull;
 
-import java.util.List;
-
 /**
  * Main entry point for accessing posts data.
  */
@@ -11,7 +9,7 @@ public interface SocialPostRepository {
 
     interface LoadSocialPostsCallback {
 
-        void onPostsLoaded(List<TwitterPost> posts);
+        void onPostsLoaded(TwitterSearchResult searchResult);
 
         void onPostsCanceled();
     }
@@ -24,7 +22,9 @@ public interface SocialPostRepository {
     }
 
 
-    void loadSocialPosts(@NonNull String searchTerm, @NonNull String language, @NonNull String resultType, @NonNull LoadSocialPostsCallback callback);
+    void loadSocialPosts(@NonNull String searchTerm, @NonNull String language, @NonNull String resultType, @NonNull long sinceId, @NonNull long maxId, @NonNull LoadSocialPostsCallback callback);
+
+    //void loadMoreSocialPosts(@NonNull String nextResults, @NonNull LoadSocialPostsCallback callback);
 
     void loadSocialPost(@NonNull String postId, @NonNull LoadSocialPostCallback callback);
 

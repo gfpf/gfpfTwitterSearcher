@@ -20,7 +20,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -40,9 +39,9 @@ public class SocialPostServiceApiImpl extends ServiceManager implements SocialPo
     }
 
     @Override
-    public void loadSocialPosts(final String searchTerm, final String language, final String resultType, final SocialPostServiceCallback<List<TwitterPost>> callback) {
+    public void loadSocialPosts(String searchTerm, String language, String resultType, long sinceId, long maxId, SocialPostServiceCallback<TwitterSearchResult> callback) {
         if (App.get().hasInternetService()) {
-            new AsyncTask<String, Void, Void>() {
+            new AsyncTask<Object, Void, Void>() {
 
                 @Override
                 protected void onPreExecute() {
@@ -50,13 +49,23 @@ public class SocialPostServiceApiImpl extends ServiceManager implements SocialPo
                 }
 
                 @Override
-                protected Void doInBackground(String... searchTerms) {
+                protected Void doInBackground(Object... searchTerms) {
                     if (searchTerms.length > 0) {
-                        if (ServiceManager.TWITTER_BEARER_TOKEN == null) {
-                            loadTwitterBearerToken(searchTerm, language, resultType, callback);
+                        String searchTerm = searchTerms[0].toString();
+                        String language = searchTerms[1].toString();
+                        String resultType = searchTerms[2].toString();
+                        long sinceId = (long) searchTerms[3];
+                        long maxId = (long) searchTerms[4];
+
+                        SocialPostServiceCallback<TwitterSearchResult> callback = (SocialPostServiceCallback<TwitterSearchResult>) searchTerms[5];
+
+                        /*if (ServiceManager.TWITTER_BEARER_TOKEN == null) {
+                            loadTwitterBearerToken(searchTerm, language, resultType, sinceId, maxId, callback);
                         } else {
-                            searchSocialPostsByTerm(searchTerms[0], searchTerms[1], searchTerms[2], callback);
-                        }
+                            searchSocialPostsByTerm(searchTerm, language, resultType, sinceId, maxId, callback);
+                        }*/
+
+                        loadTwitterBearerToken(searchTerm, language, resultType, sinceId, maxId, callback);
                     }
                     return null;
                 }
@@ -65,7 +74,7 @@ public class SocialPostServiceApiImpl extends ServiceManager implements SocialPo
                 protected void onPostExecute(Void result) {
                     super.onPostExecute(result);
                 }
-            }.execute(searchTerm, language, resultType);
+            }.execute(searchTerm, language, resultType, sinceId, maxId, callback);
 
         } else {
             App.get().suggestEnableInternet();
@@ -73,26 +82,30 @@ public class SocialPostServiceApiImpl extends ServiceManager implements SocialPo
         }
     }
 
-    private void searchSocialPostsByTerm(String searchTerm, String language, String resultType, final SocialPostServiceCallback<List<TwitterPost>> callback) {
+    private void searchSocialPostsByTerm(final String searchTerm, final String language, final String resultType, final long sinceId, final long maxId, final SocialPostServiceCallback<TwitterSearchResult> callback) {
         try {
             String encodedSearchTerm = URLEncoder.encode(searchTerm, "UTF-8");
 
-            int lastItem = 1;
-            String languageSymbol = Arrays.asList(language.split("-")).get(lastItem).trim();
+            int lastPartSplit = 1;
+            String languageSymbol = Arrays.asList(language.split("-")).get(lastPartSplit).trim();
             String encodedLanguageSymbol = URLEncoder.encode(languageSymbol.toLowerCase(), "UTF-8");
-
             String encodedResultType = URLEncoder.encode(resultType.toLowerCase(), "UTF-8");
+            int count = 15;
 
-            String requestURL = String.format(ServiceManager.TWITTER_SEARCH_API_URL, encodedSearchTerm, encodedLanguageSymbol, encodedResultType);
+            //TODO COMPLETE THE URL WITH MAX SINCE ID
 
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, requestURL, null, new Response.Listener<JSONObject>() {
+            String serviceURL = String.format(ServiceManager.TWITTER_SEARCH_API_URL, encodedSearchTerm, encodedLanguageSymbol, encodedResultType, sinceId, maxId, count);
+
+            //String encodedURL = Base64.encodeToString(serviceURL.getBytes(), Base64.NO_WRAP);
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, serviceURL, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     JsonParser parser = new JsonParser();
                     JsonObject data = parser.parse(String.valueOf(response)).getAsJsonObject();
 
                     TwitterSearchResult results = new Gson().fromJson(data, TwitterSearchResult.class);
-                    callback.onServiceLoaded(results.getStatuses());
+                    callback.onServiceLoaded(results);
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -117,7 +130,7 @@ public class SocialPostServiceApiImpl extends ServiceManager implements SocialPo
         }
     }
 
-    private void loadTwitterBearerToken(final String searchTerm, final String language, final String resultType, final SocialPostServiceCallback<List<TwitterPost>> callback) {
+    private void loadTwitterBearerToken(final String searchTerm, final String language, final String resultType, final long sinceId, final long maxId, final SocialPostServiceCallback<TwitterSearchResult> callback) {
         try {
             // Step 1: Encode consumer key and secret
             String urlApiKey = URLEncoder.encode(ServiceManager.TWITTER_CONSUMER_KEY, "UTF-8");
@@ -143,7 +156,7 @@ public class SocialPostServiceApiImpl extends ServiceManager implements SocialPo
                         if (ServiceManager.TWITTER_BEARER_TOKEN.getTokenType().equals(TwitterBearerToken.BEARER_TOKEN_TYPE)) {
 
                             // Step 3: Authenticate API request with bearer token and search by term
-                            searchSocialPostsByTerm(searchTerm, language, resultType, callback);
+                            searchSocialPostsByTerm(searchTerm, language, resultType, sinceId, maxId, callback);
                         }
                     }
 

@@ -12,27 +12,27 @@ import java.util.List;
  */
 public class FakeSocialPostServiceApiImpl implements SocialPostServiceApi {
 
-    private static final ArrayMap<String, SocialPost> POST_SERVICE_DATA = FakeSocialPostServiceApiEndpoint.loadPersistedPosts();
-
+    private static final ArrayMap<String, TwitterPost> POST_SERVICE_DATA = FakeSocialPostServiceApiEndpoint.loadPersistedPosts();
+    
     @Override
-    public void loadSocialPosts(String searchTerm, SocialPostServiceCallback<List<SocialPost>> callback) {
+    public void loadSocialPosts(String searchTerm, String language, String resultType, long sinceId, long maxId, SocialPostServiceCallback<TwitterSearchResult> callback) {
         callback.onServiceLoaded(Lists.newArrayList(POST_SERVICE_DATA.values()));
     }
 
     @Override
-    public void loadSocialPost(String postId, SocialPostServiceCallback<SocialPost> callback) {
-        SocialPost post = POST_SERVICE_DATA.get(postId);
+    public void loadSocialPost(String postId, SocialPostServiceCallback<TwitterPost> callback) {
+        TwitterPost post = POST_SERVICE_DATA.get(postId);
         callback.onServiceLoaded(post);
     }
 
     @Override
-    public void saveSocialPost(SocialPost post) {
+    public void saveSocialPost(TwitterPost post) {
         POST_SERVICE_DATA.put(post.getUUID(), post);
     }
 
     @VisibleForTesting
-    public static void addPosts(SocialPost... posts) {
-        for (SocialPost post : posts) {
+    public static void addPosts(TwitterPost... posts) {
+        for (TwitterPost post : posts) {
             POST_SERVICE_DATA.put(post.getUUID(), post);
         }
     }

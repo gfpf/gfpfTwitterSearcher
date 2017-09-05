@@ -81,6 +81,11 @@ public class SocialPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         notifyDataSetChanged();
     }
 
+    void appendData(List<TwitterPost> socialPosts) {
+        mSocialPosts.addAll(socialPosts);
+        notifyDataSetChanged();
+    }
+
     private void setList(List<TwitterPost> socialPosts) {
         mSocialPosts = checkNotNull(socialPosts);
     }

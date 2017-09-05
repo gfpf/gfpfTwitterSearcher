@@ -3,8 +3,7 @@ package com.bitty.itty.gus.socialsearcher.socialpost;
 import android.support.annotation.NonNull;
 
 import com.bitty.itty.gus.socialsearcher.data.TwitterPost;
-
-import java.util.List;
+import com.bitty.itty.gus.socialsearcher.data.TwitterSearchResult;
 
 /**
  * Created by Gus on 24/8/17.
@@ -16,9 +15,9 @@ public interface SocialPostContract {
 
         void setProgressIndicator(boolean active);
 
-        void showToastMessage(String message);
+        void showErrorMessage(String message);
 
-        void showSocialPostsUI(List<TwitterPost> posts);
+        void showSocialPostsUI(TwitterSearchResult searchResult);
 
         void showAddSocialPostUI();
 
@@ -27,7 +26,9 @@ public interface SocialPostContract {
 
     interface UserActionsListener {
 
-        void searchSocialPosts(String searchTerm, String language, String resultType, boolean forceUpdate);
+        void searchSocialPosts(String searchTerm, String language, String resultType, long sinceId, long maxId, boolean forceUpdate);
+
+        //void searchMoreSocialPosts(String nextResults);
 
         void addSocialPost();
 
