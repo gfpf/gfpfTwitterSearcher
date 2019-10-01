@@ -16,7 +16,12 @@ public class FakeSocialPostServiceApiImpl implements SocialPostServiceApi {
     
     @Override
     public void loadSocialPosts(String searchTerm, String language, String resultType, long sinceId, long maxId, SocialPostServiceCallback<TwitterSearchResult> callback) {
-        callback.onServiceLoaded(Lists.newArrayList(POST_SERVICE_DATA.values()));
+
+        //Adds FakeSocialPost as a return of the fake endpoint
+        TwitterSearchResult result = new TwitterSearchResult();
+        result.setStatuses(Lists.newArrayList(POST_SERVICE_DATA.values()));
+
+        callback.onServiceLoaded(result);
     }
 
     @Override
