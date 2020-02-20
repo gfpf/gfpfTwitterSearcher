@@ -1,9 +1,9 @@
 package com.bitty.itty.gus.socialsearcher.socialpost;
 
-import android.support.annotation.NonNull;
-
 import com.bitty.itty.gus.socialsearcher.data.TwitterPost;
 import com.bitty.itty.gus.socialsearcher.data.TwitterSearchResult;
+
+import androidx.annotation.NonNull;
 
 /**
  * Created by Gus on 24/8/17.

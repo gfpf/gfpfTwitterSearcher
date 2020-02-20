@@ -1,13 +1,13 @@
 package com.bitty.itty.gus.socialsearcher.socialpost;
 
-import android.support.annotation.NonNull;
-
 import com.bitty.itty.gus.socialsearcher.R;
 import com.bitty.itty.gus.socialsearcher.data.SocialPostRepository;
 import com.bitty.itty.gus.socialsearcher.data.TwitterPost;
 import com.bitty.itty.gus.socialsearcher.data.TwitterSearchResult;
 import com.bitty.itty.gus.socialsearcher.util.App;
 import com.bitty.itty.gus.socialsearcher.util.EspressoIdlingResource;
+
+import androidx.annotation.NonNull;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -54,32 +54,6 @@ public class SocialPostPresenter implements SocialPostContract.UserActionsListen
             }
         });
     }
-
-    /*@Override
-    public void searchMoreSocialPosts(String nextResults) {
-        mSocialPostView.setProgressIndicator(true);
-
-        // The network request might be handled in a different thread so make sure Espresso knows
-        // that the app is busy until the response is handled.
-        EspressoIdlingResource.increment(); // App is busy until further notice
-
-        //Get all socialPost items
-        mSocialPostRepository.loadMoreSocialPosts(nextResults, new SocialPostRepository.LoadSocialPostsCallback() {
-            @Override
-            public void onPostsLoaded(TwitterSearchResult results) {
-                EspressoIdlingResource.decrement(); //Set app as idle.
-                mSocialPostView.setProgressIndicator(false);
-                mSocialPostView.showSocialPostsUI(results);
-            }
-
-            @Override
-            public void onPostsCanceled() {
-                EspressoIdlingResource.decrement(); // Set app as idle.
-                mSocialPostView.setProgressIndicator(false);
-                mSocialPostView.showErrorMessage(App.get().getString(R.string.connection_error));
-            }
-        });
-    }*/
 
     @Override
     public void addSocialPost() {

@@ -1,11 +1,10 @@
 package com.bitty.itty.gus.socialsearcher.data;
 
-import android.support.annotation.VisibleForTesting;
-import android.support.v4.util.ArrayMap;
 
 import com.google.common.collect.Lists;
 
-import java.util.List;
+import androidx.annotation.VisibleForTesting;
+import androidx.collection.ArrayMap;
 
 /**
  * Fake implementation of {@link SocialPostServiceApi} to inject a fake service in a hermetic test.

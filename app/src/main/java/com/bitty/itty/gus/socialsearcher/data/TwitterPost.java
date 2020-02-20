@@ -1,27 +1,17 @@
 package com.bitty.itty.gus.socialsearcher.data;
 
-import android.support.annotation.Nullable;
-
 import com.google.common.base.Objects;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.UUID;
+
+import androidx.annotation.Nullable;
 
 /**
  * Created by Gus on 24/8/17.
  */
 
 public class TwitterPost {
-
-    /*@Nullable
-    @SerializedName("mText")
-    private String mTitle;
-    @Nullable
-    @SerializedName("description")
-    private String mDescription;
-    @Nullable
-    @SerializedName("imageHref")
-    private String mImageHref;*/
 
     private final String mUUID;
 
@@ -172,11 +162,6 @@ public class TwitterPost {
         return getText();
     }
 
-
-
-
-
-
     public boolean isEmpty() {
         return (mText == null || "".equals(mText));
     }
@@ -195,52 +180,5 @@ public class TwitterPost {
     public int hashCode() {
         return Objects.hashCode(mUUID, mText);
     }
-
-
-    /*public String getTitle() {
-        return mTitle;
-    }
-
-    public void setTitle(String mTitle) {
-        this.mTitle = mTitle;
-    }
-
-    public String getDescription() {
-        return mDescription;
-    }
-
-    public void setDescription(String mDescription) {
-        this.mDescription = mDescription;
-    }
-
-    public String getImageHref() {
-        return mImageHref;
-    }
-
-    public void setImageHref(String mImageHref) {
-        this.mImageHref = mImageHref;
-    }
-
-    public boolean isEmpty() {
-        return (mTitle == null || "".equals(mTitle)) &&
-                (mDescription == null || "".equals(mDescription));
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        TwitterPost socialPost = (TwitterPost) o;
-        return Objects.equal(mUUID, socialPost.mUUID) &&
-                Objects.equal(mTitle, socialPost.mTitle) &&
-                Objects.equal(mDescription, socialPost.mDescription) &&
-                Objects.equal(mImageHref, socialPost.mImageHref);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(mUUID, mTitle, mDescription, mImageHref);
-    }*/
 
 }

@@ -2,9 +2,6 @@ package com.bitty.itty.gus.socialsearcher.socialpost;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +19,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import butterknife.Bind;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -35,25 +35,25 @@ public class SocialPostFrag extends Fragment implements SocialPostContract.View,
 
     private SocialPostContract.UserActionsListener mActionsListener;
 
-    @Bind(R.id.search_view)
+    @BindView(R.id.search_view)
     SearchView searchView;
 
-    @Bind(R.id.btn_filter)
+    @BindView(R.id.btn_filter)
     ImageView btnFilter;
 
-    @Bind(R.id.lay_filters)
+    @BindView(R.id.lay_filters)
     View layFilters;
 
-    @Bind(R.id.spn_lang)
+    @BindView(R.id.spn_lang)
     Spinner spnLang;
 
-    @Bind(R.id.spn_result_type)
+    @BindView(R.id.spn_result_type)
     Spinner spnResultType;
 
-    @Bind(R.id.swipe_refresh)
+    @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefresh;
 
-    @Bind(R.id.recycler_view)
+    @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
 
     private GridLayoutManager layoutManager;

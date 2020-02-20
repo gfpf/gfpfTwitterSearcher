@@ -5,6 +5,7 @@ package com.bitty.itty.gus.socialsearcher.util;
  */
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,7 +13,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.Settings;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
@@ -22,6 +22,8 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.StandardExceptionParser;
 import com.google.android.gms.analytics.Tracker;
+
+import androidx.core.content.ContextCompat;
 
 /**
  * Created by Gus on 16/8/17.
@@ -68,7 +70,7 @@ public class App extends Application {
     }
 
     public void suggestEnableInternet() {
-        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(app);
+        AlertDialog.Builder builder = new AlertDialog.Builder(app);
         builder.setCancelable(false);
         builder.setMessage(app.getString(R.string.enable_internet_service));
         builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {

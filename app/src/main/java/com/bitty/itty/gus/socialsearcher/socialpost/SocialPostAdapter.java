@@ -1,7 +1,6 @@
 package com.bitty.itty.gus.socialsearcher.socialpost;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +10,14 @@ import android.widget.TextView;
 
 import com.bitty.itty.gus.socialsearcher.R;
 import com.bitty.itty.gus.socialsearcher.data.TwitterPost;
-import com.bitty.itty.gus.socialsearcher.util.App;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import butterknife.Bind;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -35,6 +36,7 @@ public class SocialPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         mItemListener = itemListener;
     }
 
+    @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
@@ -43,37 +45,54 @@ public class SocialPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         if (viewType == EMPTY_VIEW_TYPE) {
             socialPostView = inflater.inflate(R.layout.no_results_view, parent, false);
-
-            EmptyViewHolder evh = new EmptyViewHolder(socialPostView);
-            return evh;
+            return new EmptyViewHolder(socialPostView);
         }
-
         return new ViewHolder(socialPostView, mItemListener);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder genericViewHolder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder genericViewHolder, int position) {
         int viewType = getItemViewType(position);
         if (viewType == EMPTY_VIEW_TYPE) {
-
         } else {
             TwitterPost socialPost = mSocialPosts.get(position);
 
             ViewHolder viewHolder = (ViewHolder) genericViewHolder;
             viewHolder.text.setText(socialPost.getText());
 
-            if (!TextUtils.isEmpty(socialPost.getTwitterUser().getName())) {
+            if (socialPost.getTwitterUser() != null) {
                 viewHolder.description.setText(socialPost.getTwitterUser().getName());
-            }
 
-            if (!TextUtils.isEmpty(socialPost.getTwitterUser().getProfileImageUrl())) {
-                Picasso.with(App.get())
-                        .load(socialPost.getTwitterUser().getProfileImageUrl())
-                        .placeholder(android.R.drawable.ic_menu_gallery)
-                        .into(viewHolder.imageHref);
+                if (!TextUtils.isEmpty(socialPost.getTwitterUser().getProfileImageUrl())) {
+                    loadImage(socialPost, viewHolder);
+                }
             }
-
         }
+    }
+
+    private void loadImage(TwitterPost socialPost, ViewHolder viewHolder) {
+        final String imageUrl = socialPost.getTwitterUser().getProfileImageUrl();
+
+        Picasso.get()
+                .load(socialPost.getTwitterUser().getProfileImageUrl())
+                .placeholder(android.R.drawable.ic_menu_gallery)
+                .into(viewHolder.imageHref, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        String updatedImageUrl;
+                        if (imageUrl.contains("https")) {
+                            updatedImageUrl = imageUrl.replace("https", "http");
+                        } else {
+                            updatedImageUrl = imageUrl.replace("http", "https");
+                        }
+                        socialPost.getTwitterUser().setProfileImageUrl(updatedImageUrl);
+                        loadImage(socialPost, viewHolder);
+                    }
+                });
     }
 
     void replaceData(List<TwitterPost> socialPosts) {
@@ -118,13 +137,13 @@ public class SocialPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @Bind(R.id.social_post_item_text)
+        @BindView(R.id.social_post_item_text)
         TextView text;
 
-        @Bind(R.id.social_post_item_user_name)
+        @BindView(R.id.social_post_item_user_name)
         TextView description;
 
-        @Bind(R.id.social_post_item_user_image)
+        @BindView(R.id.social_post_item_user_image)
         ImageView imageHref;
 
         private SocialPostListener mItemListener;

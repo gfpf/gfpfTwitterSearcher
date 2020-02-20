@@ -1,6 +1,7 @@
 package com.bitty.itty.gus.socialsearcher.data;
 
-import android.support.v4.util.ArrayMap;
+
+import androidx.collection.ArrayMap;
 
 /**
  * This is the fake endpoint for the data source.
@@ -13,7 +14,7 @@ public class FakeSocialPostServiceApiEndpoint {
         addSocialPost("Fake Post2");
     }
 
-    private final static ArrayMap<String, TwitterPost> FAKE_POST_SERVICE_DATA;
+    private final static ArrayMap FAKE_POST_SERVICE_DATA;
 
     private static void addSocialPost(String text) {
         TwitterPost post = new TwitterPost(text);

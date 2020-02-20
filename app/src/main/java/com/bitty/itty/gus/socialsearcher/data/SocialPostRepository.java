@@ -1,6 +1,6 @@
 package com.bitty.itty.gus.socialsearcher.data;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Main entry point for accessing posts data.

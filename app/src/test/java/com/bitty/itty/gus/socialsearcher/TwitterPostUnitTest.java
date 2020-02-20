@@ -2,6 +2,7 @@ package com.bitty.itty.gus.socialsearcher;
 
 import com.bitty.itty.gus.socialsearcher.data.TwitterPost;
 import com.bitty.itty.gus.socialsearcher.data.SocialPostRepository;
+import com.bitty.itty.gus.socialsearcher.data.TwitterSearchResult;
 import com.bitty.itty.gus.socialsearcher.socialpost.SocialPostContract;
 import com.bitty.itty.gus.socialsearcher.socialpost.SocialPostPresenter;
 import com.google.common.collect.Lists;
@@ -29,16 +30,16 @@ import static org.mockito.Mockito.verify;
 public class TwitterPostUnitTest {
 
     private static ArrayList<TwitterPost> POSTS = Lists.newArrayList(
-            new TwitterPost("Title0", "Description0"),
-            new TwitterPost("Title1", "Description1"),
-            new TwitterPost("Title2", "Description2"),
-            new TwitterPost("Title3", "Description3"),
-            new TwitterPost("Title4", "Description4"),
-            new TwitterPost("Title5", "Description5"),
-            new TwitterPost("Title6", "Description6"),
-            new TwitterPost("Title7", "Description7"),
-            new TwitterPost("Title8", "Description8"),
-            new TwitterPost("Title9", "Description9"));
+            new TwitterPost("Title0"),
+            new TwitterPost("Title1"),
+            new TwitterPost("Title2"),
+            new TwitterPost("Title3"),
+            new TwitterPost("Title4"),
+            new TwitterPost("Title5"),
+            new TwitterPost("Title6"),
+            new TwitterPost("Title7"),
+            new TwitterPost("Title8"),
+            new TwitterPost("Title9"));
 
     private static List<TwitterPost> EMPTY_POSTS = new ArrayList<>(0);
 
@@ -70,17 +71,34 @@ public class TwitterPostUnitTest {
     @Test
     public void loadPostFromRepositoryAndLoadIntoView() {
         // Given an initialized SocialPostPresenter with initialized posts When loading of Post is requested
-        mSocialPostPresenter.searchSocialPosts(true);
+        mSocialPostPresenter.searchSocialPosts(
+                "Metallica"
+                , "en-US"
+                , "Recent"
+                , 0
+                , 0
+                , true
+        );
 
         // Callback is captured and invoked with stubbed posts
-        verify(mSocialPostRepository).loadSocialPosts(mLoadPostsCallbackCaptor.capture());
-        mLoadPostsCallbackCaptor.getValue().onPostsLoaded(POSTS);
+        verify(mSocialPostRepository).loadSocialPosts(
+                "Metallica"
+                , "en-US"
+                , "Recent"
+                , 0
+                , 0
+                , mLoadPostsCallbackCaptor.capture()
+        );
+
+        TwitterSearchResult searchResult = new TwitterSearchResult();
+        searchResult.setStatuses(POSTS);
+        mLoadPostsCallbackCaptor.getValue().onPostsLoaded(searchResult);
 
         // Then progress indicator is hidden and posts are shown in UI
         InOrder inOrder = Mockito.inOrder(mPostView);
         inOrder.verify(mPostView).setProgressIndicator(true);
         inOrder.verify(mPostView).setProgressIndicator(false);
-        verify(mPostView).showSocialPostsUI(POSTS);
+        verify(mPostView).showSocialPostsUI(searchResult);
     }
 
     @Test
@@ -95,13 +113,13 @@ public class TwitterPostUnitTest {
     @Test
     public void clickOnPost_ShowsDetailUI() {
         // Given a stubbed post
-        TwitterPost requestedPost = new TwitterPost("Details Requested", "For this post");
+        TwitterPost requestedPost = new TwitterPost("Details Requested");
 
         // When open post details is requested
         mSocialPostPresenter.openSocialPostDetail(requestedPost);
 
         // Then post detail UI is shown
-        verify(mPostView).showSocialPostDetailUI(any(String.class));
+        verify(mPostView).showSocialPostDetailUI(any(Long.class));
     }
 
 }
